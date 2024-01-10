@@ -1,30 +1,29 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const { Pool } = require("pg");
+require("dotenv").config();
 
-console.log(process.env.URL)
-
+console.log(process.env.URL);
 
 // =====================
-const express = require('express')
-const path = require('path')
+const express = require("express");
+const path = require("path");
 
 const app = express();
 const PORT = 3000;
 app.use(express.json());
 //
-app.use(express.static(path.join(__dirname, '../src')));
+app.use(express.static(path.join(__dirname, "../src")));
 
 // app.use('/', (req, rs) => {
 //   return res.status(200).sendFile(path.resolve(__dirname, '../src/index.html'));
 // });
 
-const taskRouter = require('./routes/api');
+const taskRouter = require("./routes/api");
 
 //ROUTE HANDLERS DEFINED
-app.use('/task', taskRouter);
+app.use("/task", taskRouter);
 
-app.use('/', (req, res) => {
-  return res.status(200).sendFile(path.resolve(__dirname, '../src/index.html'));
+app.use("/", (req, res) => {
+  return res.status(200).sendFile(path.resolve(__dirname, "../src/index.html"));
 });
 //unknown route handler
 app.use((req, res) => res.sendStatus(404));
@@ -32,9 +31,9 @@ app.use((req, res) => res.sendStatus(404));
 //Make Global Error Handler
 app.use((error, req, res, next) => {
   const defaultError = {
-    log: 'unknown middleware error',
+    log: "unknown middleware error",
     status: 400,
-    message: { error: 'An error ocurred' },
+    message: { error: "An error ocurred" },
   };
   //declare var to store overwritten default error from the global error handler(we are not overwriting the gloal err handler but the default error within it)
   const errorObj = Object.assign({}, defaultError, error);
@@ -44,6 +43,5 @@ app.use((error, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 app.listen(PORT, () => {
-
   console.log(`Listening on Port:${PORT}!`);
 });
